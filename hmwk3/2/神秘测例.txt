@@ -1,0 +1,25 @@
+s1='P(f(g(x)),x)'
+s2='P(f(g(a)),a)' o/pass
+
+s1='P(f(x),x)'
+s2='P(f(g(a)),a)' x/pass
+
+s1='P(h(x),x)'
+s2='P(f(g(a)),a)'  x/pass
+
+s1='P(g(h(x)),x)'
+s2='P(f(g(a)),a)'  x/pass
+
+s1='P(f(x),x)'
+s2='P(f(g(xx)),a)' x/pass
+
+s1='P(f(x),x)'
+s2='P(f(xx),a)' o/pass
+
+s1='P(a,xx,f(g(yy)))'
+s2='P(zz,f(zz),f(uu))' o/pass
+
+s1='P(xx,a)'
+s2='P(b,yy)' o/pass
+
+
