@@ -1,15 +1,19 @@
-def myreplace(l1,l2,dict):#仅在列表内做替换，后面对字符串的整体替换还需优化，不能出现tony->tonmike的情况了
+def myreplace(l1,l2,dict):#仅在列表内做替换，后面对字符串的整体替换还需优化，不能出现tony->tonmike的情况了。然而真实情况是还是会，要从根本变革替换法。
     if dict=={}:
         return
     dk=list(dict.keys())[0]
     dc=dict[dk]
     i=0
     while i<len(l1):    
-        l1[i]=l1[i].replace(dk,dc)
+        l1[i]=l1[i].replace('('+dk+')','('+dc+')')
+        if l1[i]==dk:
+            l1[i]=dc
         i+=1
     i=0
     while i<len(l2):    
-        l2[i]=l2[i].replace(dk,dc)
+        l2[i]=l2[i].replace('('+dk+')','('+dc+')')
+        if l2[i]==dk:
+            l2[i]=dc
         i+=1
     return
             
@@ -94,8 +98,16 @@ def MGU(s1,s2):
             i+=1
     # print(all_dict)
     for key in all_dict:
-        s1=s1.replace(key,all_dict[key])
-        s2=s2.replace(key,all_dict[key])#这里预计添加一个检测机制，旨在函数内部解决tony->tonmike的情况
+        s1=s1.replace('('+key+')','('+all_dict[key]+')')
+        s1=s1.replace('('+key+',','('+all_dict[key]+',')
+        s1=s1.replace(','+key+')',','+all_dict[key]+')')
+        s1=s1.replace(','+key+',',','+all_dict[key]+',')
+        s2=s2.replace('('+key+')','('+all_dict[key]+')')
+        s2=s2.replace('('+key+',','('+all_dict[key]+',')
+        s2=s2.replace(','+key+')',','+all_dict[key]+')')
+        s2=s2.replace(','+key+',',','+all_dict[key]+',')
+        # s1=s1.replace(key,all_dict[key])
+        # s2=s2.replace(key,all_dict[key])#这里预计添加一个检测机制，旨在函数内部解决tony->tonmike的情况。你到底解决了什么？？？
     # print(s1)
     # print(s2)        
     if(s1!=s2):

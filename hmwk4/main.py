@@ -30,20 +30,21 @@ def merge(e1,e2):
                     k=0
                     while k<len(le3):
                         for key in all_dict:
-                            # le3[k]=le3[k].replace('('+key+')','('+all_dict[key]+')')
-                            # le3[k]=le3[k].replace('('+key+',','('+all_dict[key]+',')
-                            # le3[k]=le3[k].replace(','+key+')',','+all_dict[key]+')')
-                            # le3[k]=le3[k].replace(','+key+',',','+all_dict[key]+',')#答案是低配正则表达式
-                            le3[k]=le3[k].replace(key,all_dict[key])
+                            le3[k]=le3[k].replace('('+key+')','('+all_dict[key]+')')
+                            le3[k]=le3[k].replace('('+key+',','('+all_dict[key]+',')
+                            le3[k]=le3[k].replace(','+key+')',','+all_dict[key]+')')
+                            le3[k]=le3[k].replace(','+key+',',','+all_dict[key]+',')#答案是低配正则表达式
+                            # le3[k]=le3[k].replace(key,all_dict[key])
                         k+=1
+                    le3=set(le3)
                     e3=tuple(le3)
                     if e3 not in FKB:
-                        if e3==():
-                            return
                         # print(all_dict)
                         FKB.append(e3)
                         l_support.append(1)
                         myprint(e1, e2, i, j, all_dict, e3)
+                        if e3==():
+                            return
             j+=1
         i+=1
     return 
@@ -62,8 +63,8 @@ def myprint(e1, e2, i, j, all_dict, e3):
         print(count,' R[',i1,chr(97+i),',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
     count+=1
 
-# SKB={("A(tony)",),("A(mike)",),("A(john)",),("L(tony,rain)",),("L(tony,snow)",),("~A(x)","S(x)","C(x)"),("~C(y)","~L(y,rain)"),("L(z,snow)","~S(z)"),("~L(tony,u)","~L(mike,u)"),("L(tony,v)","L(mike,v)"),("~A(w)","~C(w)","S(w)")}
-KB=[("GradStudent(sue)",),("~GradStudent(x)","Student(x)"),("~Student(x)","HardWorker(x)"),("~HardWorker(sue)",)]#痛，太痛了
+KB=[("A(tony)",),("A(mike)",),("A(john)",),("L(tony,rain)",),("L(tony,snow)",),("~A(x)","S(x)","C(x)"),("~C(y)","~L(y,rain)"),("L(z,snow)","~S(z)"),("~L(tony,u)","~L(mike,u)"),("L(tony,v)","L(mike,v)"),("~A(w)","~C(w)","S(w)")]
+# KB=[("GradStudent(sue)",),("~GradStudent(x)","Student(x)"),("~Student(x)","HardWorker(x)"),("~HardWorker(sue)",)]#痛，太痛了
 
 
 # KB=list(SKB)
@@ -88,6 +89,8 @@ def ResolutionProb():
             while jj<len(KB):
                 if l_support[ii]|l_support[jj]:
                     merge(KB[ii],KB[jj])
+                    if () in FKB:
+                        break
                 jj+=1
             ii+=1
                 
