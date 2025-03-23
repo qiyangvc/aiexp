@@ -1,4 +1,4 @@
-def myreplace(l1,l2,dict):
+def myreplace(l1,l2,dict):#仅在列表内做替换，后面对字符串的整体替换还需优化，不能出现tony->tonmike的情况了
     if dict=={}:
         return
     dk=list(dict.keys())[0]
@@ -14,7 +14,7 @@ def myreplace(l1,l2,dict):
     return
             
         
-def if_var(sstr):
+def if_var(sstr):#判断是否为变量
     if sstr[0] in {'u','v','w','x','y','z'}:
         return True
     else :
@@ -28,7 +28,7 @@ def real_dif(t_str1,t_str2):
             t_str1=t_str1[lp1+1:rp1]
             lp2=t_str2.find('(')
             rp2=t_str2.rfind(')')
-            t_str2=t_str2[lp2+1:rp2]
+            t_str2=t_str2[lp2+1:rp2]#去括号部分b，这里是比较两项结构是否相同，但是实际上因为我未能处理传参问题，这个函数被直接写入difference内
         else :
             break
     return
@@ -36,7 +36,7 @@ def difference(str1,str2):
     t_str1=str1
     t_str2=str2
     str1 = de_p(str1)
-    str2 = de_p(str2)
+    str2 = de_p(str2)#去括号部分a，这里是比较两个变量是否相同
         
     while ('(' in t_str1)&('(' in t_str2):
         if t_str1[0]==t_str2[0]:
@@ -45,7 +45,7 @@ def difference(str1,str2):
             t_str1=t_str1[lp1+1:rp1]
             lp2=t_str2.find('(')
             rp2=t_str2.rfind(')')
-            t_str2=t_str2[lp2+1:rp2]
+            t_str2=t_str2[lp2+1:rp2]#去括号部分b，这里是比较两项结构是否相同
         else :
             break
         
@@ -59,7 +59,7 @@ def difference(str1,str2):
     else :
         return {}
 
-def de_p(s):
+def de_p(s):#去括号的精简版
     while '(' in s:
         lp=s.find('(')
         rp=s.rfind(')')
@@ -73,7 +73,7 @@ def MGU(s1,s2):
     lp2=s2.find('(')
     rp1=s1.rfind(')')
     rp2=s2.rfind(')')
-    l1=s1[lp1+1:rp1].split(',')
+    l1=s1[lp1+1:rp1].split(',')#去括号部分c，这里是将表达式内的项分离
     l2=s2[lp2+1:rp2].split(',')
     if len(l1)!=len(l2):
         return
@@ -95,7 +95,7 @@ def MGU(s1,s2):
     # print(all_dict)
     for key in all_dict:
         s1=s1.replace(key,all_dict[key])
-        s2=s2.replace(key,all_dict[key])
+        s2=s2.replace(key,all_dict[key])#这里预计添加一个检测机制，旨在函数内部解决tony->tonmike的情况
     # print(s1)
     # print(s2)        
     if(s1!=s2):
