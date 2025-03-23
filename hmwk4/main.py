@@ -4,9 +4,23 @@ count=1
 t1_count=0
 t2_count=0
 l_support=[]
-rootmap={}
+l_ancestors=[]#祖先过滤算法
+rootmap={}#通过字典寻根
 l_need=set({})
 l_words=[]
+def is_grand(ii,jj):
+    global l_need
+    findroot(ii+1)
+    if jj+1 in l_need:
+        l_need=set({})
+        return True
+    l_need=set({})
+    findroot(jj+1)
+    if jj+1 in l_need:
+        l_need=set({})
+        return True
+    l_need=set({})
+    return False
 def findroot(count):
     global t1_count
     global l_need
@@ -58,6 +72,7 @@ def merge(e1,e2):
                         # print(all_dict)
                         FKB.append(e3)
                         l_support.append(1)
+                        l_ancestors.append(1)
                         myprint(e1, e2, i, j, all_dict, e3)
                         if e3==():
                             t2_count=count
@@ -87,24 +102,18 @@ def myprint(e1, e2, i, j, all_dict, e3):
         # print(count,' R[',i1,chr(97+i),',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
     count+=1
 
-KB=[("A(tony)",),("A(mike)",),("A(john)",),("L(tony,rain)",),("L(tony,snow)",),("~A(x)","S(x)","C(x)"),("~C(y)","~L(y,rain)"),("L(z,snow)","~S(z)"),("~L(tony,u)","~L(mike,u)"),("L(tony,v)","L(mike,v)"),("~A(w)","~C(w)","S(w)")]
-# KB=[("On(aa,bb)",),("On(bb,cc)",),("Green(aa)",),("~Green(cc)",),("~On(x,y)","~Green(x)","Green(y)")]
-# KB=[("GradStudent(sue)",),("~GradStudent(x)","Student(x)"),("~Student(x)","HardWorker(x)"),("~HardWorker(sue)",)]#痛，太痛了
-
-# KB=list(SKB)
-FKB=copy.deepcopy(KB)#祖先备份
-def ResolutionProb():
+def ResolutionProb(KB):
     global t1_count
     global count
     global l_need
     i=0
-
-    
     while i<len(FKB):
+        l_ancestors.append(0)
         l_support.append(0)
         print(count,FKB[i])
         i+=1
         count+=1
+    l_ancestors[count-2]=0
     l_support[count-2]=1
     t1_count=count
     while 1:
@@ -112,9 +121,10 @@ def ResolutionProb():
         
         ii=0
         while ii<len(KB):
-            jj=0
+            jj=ii
             while jj<len(KB):
                 if l_support[ii]|l_support[jj]:
+                # if ((not l_ancestors[ii])|(not l_ancestors[jj])|is_grand(ii,jj))&(l_support[ii]|l_support[jj]):
                     merge(KB[ii],KB[jj])
                     if () in FKB:
                         break
@@ -128,7 +138,15 @@ def ResolutionProb():
             for element in l_need:
                 print(l_words[element-t1_count])
             return
-ResolutionProb() 
+
+# KB=[("A(tony)",),("A(mike)",),("A(john)",),("L(tony,rain)",),("L(tony,snow)",),("~A(x)","S(x)","C(x)"),("~C(y)","~L(y,rain)"),("L(z,snow)","~S(z)"),("~L(tony,u)","~L(mike,u)"),("L(tony,v)","L(mike,v)"),("~A(w)","~C(w)","S(w)")]
+# KB=[("On(aa,bb)",),("On(bb,cc)",),("Green(aa)",),("~Green(cc)",),("~On(x,y)","~Green(x)","Green(y)")]
+KB=[("GradStudent(sue)",),("~GradStudent(x)","Student(x)"),("~Student(x)","HardWorker(x)"),("~HardWorker(sue)",)]#痛，太痛了
+# n = int(input("请输入行数: "))
+# KB = [(input()) for _ in range(n)]
+FKB=copy.deepcopy(KB)#祖先备份
+
+ResolutionProb(KB) 
 
 
 # if if_ancestors(c1)||if_ancestors(c2)||if_grand(c1,c2) :
