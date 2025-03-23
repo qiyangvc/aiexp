@@ -1,10 +1,26 @@
 import copy
 from MGU import MGU,de_p
 count=1
+t1_count=0
+t2_count=0
 l_support=[]
+rootmap={}
+l_need=set({})
+l_words=[]
+def findroot(count):
+    global t1_count
+    global l_need
+    if count<t1_count:
+        return
+    l_need.add(count)
+    findroot(rootmap[count][0])
+    findroot(rootmap[count][1])
+    
+    
 def merge(e1,e2):
     if(e1==e2):
         return
+    global t2_count
     global count
     i=0
     while i<len(e1):
@@ -44,6 +60,7 @@ def merge(e1,e2):
                         l_support.append(1)
                         myprint(e1, e2, i, j, all_dict, e3)
                         if e3==():
+                            t2_count=count
                             return
             j+=1
         i+=1
@@ -51,26 +68,35 @@ def merge(e1,e2):
 
 def myprint(e1, e2, i, j, all_dict, e3):
     global count
+    global rootmap
+    global l_words
     i1=FKB.index(e1)+1
     i2=FKB.index(e2)+1
+    rootmap[count]=[i1,i2]
     if len(e1)==1&len(e2)==1:
-        print(count,' R[',i1,',',i2,']',all_dict,'= ',e3,sep='')
+        # print(count,' R[',i1,',',i2,']',all_dict,' = ',e3,sep='')
+        l_words.append(str(count)+' R['+str(i1)+','+str(i2)+']'+str(all_dict)+' = '+str(e3))
     elif len(e1)==1:
-        print(count,' R[',i1,',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
+        # print(count,' R[',i1,',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
+        l_words.append(str(count)+' R['+str(i1)+','+str(i2)+chr(97+j)+']'+str(all_dict)+' = '+str(e3))
     elif len(e2)==1:
-        print(count,' R[',i1,chr(97+i),',',i2,']',all_dict,' = ',e3,sep='')
+        l_words.append(str(count)+' R['+str(i1)+chr(97+i)+','+str(i2)+']'+str(all_dict)+' = '+str(e3))
+        # print(count,' R[',i1,chr(97+i),',',i2,']',all_dict,' = ',e3,sep='')
     else:
-        print(count,' R[',i1,chr(97+i),',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
+        l_words.append(str(count)+' R['+str(i1)+chr(97+i)+','+str(i2)+chr(97+j)+']'+str(all_dict)+' = '+str(e3))
+        # print(count,' R[',i1,chr(97+i),',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
     count+=1
 
 KB=[("A(tony)",),("A(mike)",),("A(john)",),("L(tony,rain)",),("L(tony,snow)",),("~A(x)","S(x)","C(x)"),("~C(y)","~L(y,rain)"),("L(z,snow)","~S(z)"),("~L(tony,u)","~L(mike,u)"),("L(tony,v)","L(mike,v)"),("~A(w)","~C(w)","S(w)")]
+# KB=[("On(aa,bb)",),("On(bb,cc)",),("Green(aa)",),("~Green(cc)",),("~On(x,y)","~Green(x)","Green(y)")]
 # KB=[("GradStudent(sue)",),("~GradStudent(x)","Student(x)"),("~Student(x)","HardWorker(x)"),("~HardWorker(sue)",)]#痛，太痛了
-
 
 # KB=list(SKB)
 FKB=copy.deepcopy(KB)#祖先备份
 def ResolutionProb():
+    global t1_count
     global count
+    global l_need
     i=0
 
     
@@ -80,6 +106,7 @@ def ResolutionProb():
         i+=1
         count+=1
     l_support[count-2]=1
+    t1_count=count
     while 1:
         KB=copy.deepcopy(FKB)
         
@@ -95,7 +122,11 @@ def ResolutionProb():
             ii+=1
                 
         if () in FKB:
-            print('t')
+            findroot(t2_count-1)
+            l_need=list(l_need)
+            l_need.sort()
+            for element in l_need:
+                print(l_words[element-t1_count])
             return
 ResolutionProb() 
 
