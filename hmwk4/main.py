@@ -30,10 +30,16 @@ def merge(e1,e2):
                     k=0
                     while k<len(le3):
                         for key in all_dict:
+                            # le3[k]=le3[k].replace('('+key+')','('+all_dict[key]+')')
+                            # le3[k]=le3[k].replace('('+key+',','('+all_dict[key]+',')
+                            # le3[k]=le3[k].replace(','+key+')',','+all_dict[key]+')')
+                            # le3[k]=le3[k].replace(','+key+',',','+all_dict[key]+',')#答案是低配正则表达式
                             le3[k]=le3[k].replace(key,all_dict[key])
                         k+=1
                     e3=tuple(le3)
                     if e3 not in FKB:
+                        if e3==():
+                            return
                         # print(all_dict)
                         FKB.append(e3)
                         l_support.append(1)
@@ -56,16 +62,11 @@ def myprint(e1, e2, i, j, all_dict, e3):
         print(count,' R[',i1,chr(97+i),',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
     count+=1
 
-SKB={("A(tony)",),("A(mike)",),("A(john)",),("L(tony,rain)",),("L(tony,snow)",),("~A(x)","S(x)","C(x)"),("~C(y)","~L(y,rain)"),("L(z,snow)","~S(z)"),("~L(tony,u)","~L(mike,u)"),("L(tony,v)","L(mike,v)"),("~A(w)","~C(w)","S(w)")}
-# SKB={("GradStudent(sue)",),("~GradStudent(x)","Student(x)"),("~Student(x)","HardWorker(x)"),("~HardWorker(sue)",)}#痛，太痛了
+# SKB={("A(tony)",),("A(mike)",),("A(john)",),("L(tony,rain)",),("L(tony,snow)",),("~A(x)","S(x)","C(x)"),("~C(y)","~L(y,rain)"),("L(z,snow)","~S(z)"),("~L(tony,u)","~L(mike,u)"),("L(tony,v)","L(mike,v)"),("~A(w)","~C(w)","S(w)")}
+KB=[("GradStudent(sue)",),("~GradStudent(x)","Student(x)"),("~Student(x)","HardWorker(x)"),("~HardWorker(sue)",)]#痛，太痛了
 
-# 5
-# On(aa,bb)
-# On(bb,cc)
-# Green(aa)
-# ~Green(cc)
-# (~On(x,y),~Green(x),Green(y))
-KB=list(SKB)
+
+# KB=list(SKB)
 FKB=copy.deepcopy(KB)#祖先备份
 def ResolutionProb():
     global count
