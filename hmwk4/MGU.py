@@ -1,4 +1,4 @@
-def myreplace(l1,l2,dict):#仅在列表内做替换，后面对字符串的整体替换还需优化，不能出现tony->tonmike的情况了。然而真实情况是还是会，要从根本变革替换法。
+def myreplace(l1,l2,dict):#仅在列表内做替换
     if dict=={}:
         return
     dk=list(dict.keys())[0]
@@ -11,7 +11,7 @@ def myreplace(l1,l2,dict):#仅在列表内做替换，后面对字符串的整�
         i+=1
     i=0
     while i<len(l2):    
-        l2[i]=l2[i].replace('('+dk+')','('+dc+')')
+        l2[i]=l2[i].replace('('+dk+')','('+dc+')')#还是用类似正则表达式来解决，如xx会被检测为(xx)，避免xx被x：tony改为tonytony
         if l2[i]==dk:
             l2[i]=dc
         i+=1
@@ -40,7 +40,7 @@ def difference(str1,str2):
     t_str1=str1
     t_str2=str2
     str1 = de_p(str1)
-    str2 = de_p(str2)#去括号部分a，这里是比较两个变量是否相同
+    str2 = de_p(str2)#去括号部分a，这里是比较两个变量是否相同，如比较f(x)和x。兼有判断是否为变量的功能，如x和a
         
     while ('(' in t_str1)&('(' in t_str2):
         if t_str1[0]==t_str2[0]:
@@ -49,21 +49,21 @@ def difference(str1,str2):
             t_str1=t_str1[lp1+1:rp1]
             lp2=t_str2.find('(')
             rp2=t_str2.rfind(')')
-            t_str2=t_str2[lp2+1:rp2]#去括号部分b，这里是比较两项结构是否相同
+            t_str2=t_str2[lp2+1:rp2]#去括号部分b，这里是比较两项结构是否相同，如比较g(x)和f(x)
         else :
             break
         
     if str1==str2:#要么不需替换，要么无法替换
         return {}
         
-    elif if_var(t_str1):#这里姑且用str1直接替换str2，如g(x)换f(z)，下同，详见神秘测例
-        return{t_str1:t_str2}#fk 神秘测例
+    elif if_var(t_str1):
+        return{t_str1:t_str2}
     elif if_var(t_str2):
         return{t_str2:t_str1}
     else :
         return {}
 
-def de_p(s):#去括号的精简版
+def de_p(s):#去括号部分a的精简版
     while '(' in s:
         lp=s.find('(')
         rp=s.rfind(')')
@@ -71,19 +71,14 @@ def de_p(s):#去括号的精简版
     return s
     
 def MGU(s1,s2):
-
-    
     lp1=s1.find('(')
     lp2=s2.find('(')
     rp1=s1.rfind(')')
     rp2=s2.rfind(')')
-    l1=s1[lp1+1:rp1].split(',')#去括号部分c，这里是将表达式内的项分离
+    l1=s1[lp1+1:rp1].split(',')#去括号部分c，这里是将表达式内的项分离，如L(x,y,z)
     l2=s2[lp2+1:rp2].split(',')
     if len(l1)!=len(l2):
         return
-    # print(lp1,rp1)
-    # print(lp2,rp2)
-    # print(l1,l2)
     all_dict={}
     
     i=0
@@ -96,7 +91,6 @@ def MGU(s1,s2):
             myreplace(l1,l2,dict)
             all_dict.update(dict)
             i+=1
-    # print(all_dict)
     for key in all_dict:
         s1=s1.replace('('+key+')','('+all_dict[key]+')')
         s1=s1.replace('('+key+',','('+all_dict[key]+',')
@@ -105,11 +99,7 @@ def MGU(s1,s2):
         s2=s2.replace('('+key+')','('+all_dict[key]+')')
         s2=s2.replace('('+key+',','('+all_dict[key]+',')
         s2=s2.replace(','+key+')',','+all_dict[key]+')')
-        s2=s2.replace(','+key+',',','+all_dict[key]+',')
-        # s1=s1.replace(key,all_dict[key])
-        # s2=s2.replace(key,all_dict[key])#这里预计添加一个检测机制，旨在函数内部解决tony->tonmike的情况。你到底解决了什么？？？
-    # print(s1)
-    # print(s2)        
+        s2=s2.replace(','+key+',',','+all_dict[key]+',')#手动正则表达式，只是用于区分没有改变和无法归结的情况，但是由于为了将作业3的两函数拼接在一起，留下了这个“待优化”的部分
     if(s1!=s2):
         return {}
     else :
