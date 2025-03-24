@@ -50,7 +50,7 @@ def merge(e1,e2):#调用MGU来处理元组内的一阶逻辑式
                         if(t_s1!=t_s2):
                             j+=1
                             continue
-                    e3=tuple(set(e1+e2)-{e1[i],e2[j]})#用集合合并元组，每次输出结果都不同的罪魁祸首
+                    e3=tuple(set(e1+e2)-{e1[i],e2[j]})#用集合合并元组，每次输出结果都不同的主要原因
                     le3=list(e3)
                     k=0
                     while k<len(le3):
