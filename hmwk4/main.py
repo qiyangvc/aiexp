@@ -1,13 +1,13 @@
 import copy
-from MGU import MGU,de_p
-count=1
-t1_count=0
-t2_count=0
-l_support=[]
-l_ancestors=[]#祖先过滤算法
-rootmap={}#通过字典寻根
-l_need=set({})
-l_words=[]
+from MGU import MGU
+count=1#记录一阶逻辑总数
+t1_count=0#记录初始逻辑数量
+t2_count=0#记录输出空括号时的count，用于回溯输出
+l_support=[]#支持集数组，用于确定目标
+l_ancestors=[]#祖先过滤策略数组，用于判断是否为最早的祖先
+rootmap={}#通过字典寻根，相当于树结构
+l_need=set({})#用于收集回溯函数的序号
+l_words=[]#用于存储输出语句
 def is_grand(ii,jj):
     global l_need
     findroot(ii+1)
@@ -24,12 +24,12 @@ def is_grand(ii,jj):
 def findroot(count):
     global t1_count
     global l_need
+
+    l_need.add(count)
     if count<t1_count:
         return
-    l_need.add(count)
     findroot(rootmap[count][0])
     findroot(rootmap[count][1])
-    
     
 def merge(e1,e2):
     if(e1==e2):
@@ -42,12 +42,6 @@ def merge(e1,e2):
         while j<len(e2):
             if (e1[i][0]=='~')&(e2[j][0]!='~')|(e1[i][0]!='~')&(e2[j][0]=='~'):
                 if (e1[i][1:e1[i].index('(')]==e2[j][:e2[j].index('(')])|(e2[j][1:e2[j].index('(')]==e1[i][:e1[i].index('(')]):
-                #     if (i==0)&(j==0):
-                #         return e1[1:]+e2[1:]
-                #     elif i==0:
-                #         return e1[1:]+e2[:j-1]+e2[j+1:]
-                #     elif j==0:
-                #         return e1[:i-1]+e1[i+1:]+e2[1:]
                     t_s1=e1[i].replace('~','')
                     t_s2=e2[j].replace('~','')
                     all_dict=MGU(t_s1,t_s2)
@@ -106,11 +100,13 @@ def ResolutionProb(KB):
     global t1_count
     global count
     global l_need
+    global l_words
     i=0
     while i<len(FKB):
         l_ancestors.append(0)
         l_support.append(0)
-        print(count,FKB[i])
+        # print(count,FKB[i])
+        l_words.append(str(count)+" "+str(FKB[i]))
         i+=1
         count+=1
     l_ancestors[count-2]=0
@@ -136,23 +132,20 @@ def ResolutionProb(KB):
             l_need=list(l_need)
             l_need.sort()
             for element in l_need:
-                print(l_words[element-t1_count])
+                print(l_words[element-1])
             return
-
-# KB=[("A(tony)",),("A(mike)",),("A(john)",),("L(tony,rain)",),("L(tony,snow)",),("~A(x)","S(x)","C(x)"),("~C(y)","~L(y,rain)"),("L(z,snow)","~S(z)"),("~L(tony,u)","~L(mike,u)"),("L(tony,v)","L(mike,v)"),("~A(w)","~C(w)","S(w)")]
-# KB=[("On(aa,bb)",),("On(bb,cc)",),("Green(aa)",),("~Green(cc)",),("~On(x,y)","~Green(x)","Green(y)")]
-KB=[("GradStudent(sue)",),("~GradStudent(x)","Student(x)"),("~Student(x)","HardWorker(x)"),("~HardWorker(sue)",)]#痛，太痛了
-# n = int(input("请输入行数: "))
-# KB = [(input()) for _ in range(n)]
+def myscan(KB):
+    n = int(input("请输入行数: "))
+    i=0
+    while i<n:
+        temp_s=input()
+        if temp_s[0]!='(':
+            KB.append((temp_s,))
+        else:
+            KB.append(tuple(temp_s[1:len(temp_s)-1].replace('),',') ').split(' ')))
+        i+=1
+#这里是主函数     
+KB=[]
+myscan(KB)
 FKB=copy.deepcopy(KB)#祖先备份
-
-ResolutionProb(KB) 
-
-
-# if if_ancestors(c1)||if_ancestors(c2)||if_grand(c1,c2) :
-#     merge(c1,c2)
-    
-    
-# def if_ancestors(c) :
-#     return c in FKB
-# def if_grand(c1,c2):
+ResolutionProb(KB)
