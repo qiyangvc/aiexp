@@ -37,6 +37,7 @@ def merge(e1,e2):#调用MGU来处理元组内的一阶逻辑式
         return
     global t2_count
     global count
+    global KB
     i=0
     while i<len(e1):
         j=0
@@ -62,8 +63,8 @@ def merge(e1,e2):#调用MGU来处理元组内的一阶逻辑式
                         k+=1
                     le3=set(le3)#集合去重，因为替换过程中可能再次出现重复
                     e3=tuple(le3)
-                    if e3 not in FKB:
-                        FKB.append(e3)
+                    if e3 not in KB:
+                        KB.append(e3)
                         l_support.append(1)
                         l_ancestors.append(1)
                         myprint(e1, e2, i, j, all_dict, e3)#存储归结步骤
@@ -78,21 +79,22 @@ def myprint(e1, e2, i, j, all_dict, e3):
     global count
     global rootmap
     global l_words
-    i1=FKB.index(e1)+1
-    i2=FKB.index(e2)+1
+    global KB
+    i1=KB.index(e1)+1
+    i2=KB.index(e2)+1
     rootmap[count]=[i1,i2]#rootmap在这里存储
     if len(e1)==1&len(e2)==1:
-        # print(count,' R[',i1,',',i2,']',all_dict,' = ',e3,sep='')
+        print(count,' R[',i1,',',i2,']',all_dict,' = ',e3,sep='')
         l_words.append(str(count)+' R['+str(i1)+','+str(i2)+']'+str(all_dict)+' = '+str(e3))
     elif len(e1)==1:
-        # print(count,' R[',i1,',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
+        print(count,' R[',i1,',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
         l_words.append(str(count)+' R['+str(i1)+','+str(i2)+chr(97+j)+']'+str(all_dict)+' = '+str(e3))
     elif len(e2)==1:
         l_words.append(str(count)+' R['+str(i1)+chr(97+i)+','+str(i2)+']'+str(all_dict)+' = '+str(e3))
-        # print(count,' R[',i1,chr(97+i),',',i2,']',all_dict,' = ',e3,sep='')
+        print(count,' R[',i1,chr(97+i),',',i2,']',all_dict,' = ',e3,sep='')
     else:
         l_words.append(str(count)+' R['+str(i1)+chr(97+i)+','+str(i2)+chr(97+j)+']'+str(all_dict)+' = '+str(e3))
-        # print(count,' R[',i1,chr(97+i),',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
+        print(count,' R[',i1,chr(97+i),',',i2,chr(97+j),']',all_dict,' = ',e3,sep='')
     count+=1
 
 def ResolutionProb(KB):
@@ -101,32 +103,32 @@ def ResolutionProb(KB):
     global l_need
     global l_words
     i=0
-    while i<len(FKB):
+    while i<len(KB):
         l_ancestors.append(0)
         l_support.append(0)
-        l_words.append(str(count)+" "+str(FKB[i]))
+        l_words.append(str(count)+" "+str(KB[i]))
         i+=1
         count+=1
     l_ancestors[count-2]=0
     l_support[count-2]=1
     t1_count=count
     while 1:
-        KB=copy.deepcopy(FKB)
-        
         ii=0
         while ii<len(KB):
-            jj=ii
-            while jj<len(KB):
+            jj=0
+            while jj<ii:
                 if l_support[ii]|l_support[jj]:#支持集策略
                 # if (not l_ancestors[ii])|(not l_ancestors[jj])|is_grand(ii,jj):#是否只启用祖先过滤策略
                 # if ((not l_ancestors[ii])|(not l_ancestors[jj])|is_grand(ii,jj))&(l_support[ii]|l_support[jj]):#是否同时启用祖先过滤策略和支持集策略
                     merge(KB[ii],KB[jj])
-                    if () in FKB:
+                    if () in KB:
                         break
                 jj+=1
+                if()in KB:
+                    break
             ii+=1
                 
-        if () in FKB:
+        if () in KB:
             findroot(t2_count-1)
             l_need=list(l_need)
             l_need.sort()
@@ -146,5 +148,5 @@ def myscan(KB):
 #这里是主函数     
 KB=[]
 myscan(KB)#把输入处理成可识别的格式
-FKB=copy.deepcopy(KB)#祖先备份
+#祖先备份
 ResolutionProb(KB)
