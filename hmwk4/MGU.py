@@ -32,7 +32,7 @@ def real_dif(t_str1,t_str2):
             t_str1=t_str1[lp1+1:rp1]
             lp2=t_str2.find('(')
             rp2=t_str2.rfind(')')
-            t_str2=t_str2[lp2+1:rp2]#去括号部分b，这里是比较两项结构是否相同，但是实际上因为我未能处理传参问题，这个函数被直接写入difference内
+            t_str2=t_str2[lp2+1:rp2]#去括号部分b，这里是比较两项结构是否相同，但是实际上因为我未能处理传参问题，这个函数被直接写入difference内，而没有被调用。
         else :
             break
     return
