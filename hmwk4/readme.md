@@ -1,6 +1,8 @@
-﻿Code文件夹包含四个文件：main.py、MGU.py、测例.txt、readme.md
+﻿# 作业4
 
-````
+Code文件夹包含四个文件：main.py、MGU.py、测例.txt、readme.md
+
+````null
 code_
      |_main.py
      |_MGU.py
