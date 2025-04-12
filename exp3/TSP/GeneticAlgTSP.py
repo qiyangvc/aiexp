@@ -7,7 +7,7 @@ class GeneticAlgTSP:
     n=0
     filename=''
     cities=np.array
-    population_size=10
+    population_size=1000
     population=np.array
     fits=np.array
     def __init__(self,filename):
@@ -32,11 +32,11 @@ class GeneticAlgTSP:
         # print(self.n,self.cities)
         #初始化种群
         i=0
-        self.population=np.zeros((10,self.n),dtype=int)
+        self.population=np.zeros((self.population_size,self.n),dtype=int)
         while i<self.population_size:
             self.population[i]=np.random.choice(range(1,self.n+1),self.n,replace=False)
             i+=1
-        print(self.population)
+        # print(self.population
     def iterate(self,num_interations):
         i=0
 
@@ -44,8 +44,8 @@ class GeneticAlgTSP:
             self.fits=np.zeros((self.population_size))
             self.fitness()
             self.choose()
-            # self.cross()
-            # self.mutate()
+            self.cross()
+            self.mutate()
             i+=1
     def fitness(self):
         i=0
@@ -63,27 +63,65 @@ class GeneticAlgTSP:
             i+=1
     def choose(self):
         fits_sum=np.sum(self.fits)
-        fits_rate=np.zeros(10)
+        fits_rate=np.zeros(self.population_size)
         i=0
         while i<self.population_size:
             fits_rate[i]=fits_sum-self.fits[i]
             i+=1
         t_population=copy.deepcopy(self.population)
         self.population=random.choices(t_population,weights=fits_rate,k=self.population_size)
+        
     def cross(self):
         i=int(self.population_size/2)
         while i>0:
             indexs=random.sample(range(0,self.n),2)
             indexs.sort()
-            changed_part=self.population[2*i-1][indexs[0]:indexs[1]]
-            while 
+            k1=indexs[0]
+            k2=indexs[1]
+            changed_part1=self.population[2*i-1][k1:k2]
+            changed_part2=[]
+            j=0
+            k=0
+            while j<self.n:
+                t_value=self.population[2*i-2][j]
+                if t_value in changed_part1:
+                    changed_part2.append(t_value)
+                    self.population[2*i-2][j]=changed_part1[k]
+                    k+=1
+                j+=1
+            self.population[2*i-1][k1:k2]=changed_part2
+                    
+                    
+            # k=k1
+            # while k<=k1:
+            #     j=0
+            #     while j<self.population_size:
+            #         if changed_part1[k]==self.population[2*i-2][j]:
+            #             changed_indexs.append(j)
+            #         j+=1
+            #     k+=1
+            # changed_indexs.sort()
+            # j=0
+            # changed_part2=[]
+            # while j<len(changed_indexs):
+            #     t_index=changed_indexs[j]
+            #     changed_part2.append(self.population[2*i-2][t_index])
             i-=1
-        pass
-    def mutate():
-        pass
+    def mutate(self):
+        i=0
+        while i<self.population_size:
+            indexs=random.sample(range(0,self.n),2)
+            indexs.sort()
+            k1=indexs[0]
+            k2=indexs[1]
+            self.population[k1:k2]=reversed(self.population[k1:k2])
+            i+=1
 filename="dj38.tsp"
 tsp1= GeneticAlgTSP(filename)
-print(tsp1.n)
-tsp1.iterate(1000)
-print(tsp1.population)
-print(tsp1.fits)
+i=0
+while i<10:
+    # print(tsp1.n)
+    tsp1.iterate(1)
+    # print(tsp1.population)
+    print(tsp1.fits.min())
+    i+=1
