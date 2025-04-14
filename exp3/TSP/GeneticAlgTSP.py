@@ -102,7 +102,7 @@ class GeneticAlgTSP:
             i-=1
     def mutate(self):#变异
         i=0
-        mutate_rate=0.1#变异率
+        mutate_rate=0.5#变异率
         mutate_size=int(self.population_size*mutate_rate)
         while i<mutate_size:
             indexs=random.sample(range(0,self.n),2)
