@@ -4,11 +4,11 @@ import numpy as np
 
 
 class GeneticAlgTSP:
-    n=0
+    n=0#城市数量
     filename=''
-    cities=np.array
-    population_size=1000
-    population=np.array
+    cities=np.array#每个城市的坐标
+    population_size=10#种群容量
+    population=np.array#种群的每个个体，由一个数组组成，即访问城市的顺序
     fits=np.array
     def __init__(self,filename):
         #读文件
@@ -29,17 +29,15 @@ class GeneticAlgTSP:
                         line=file.readline()
                         i+=1
                 line=file.readline()
-        # print(self.n,self.cities)
         #初始化种群
         i=0
         self.population=np.zeros((self.population_size,self.n),dtype=int)
         while i<self.population_size:
             self.population[i]=np.random.choice(range(1,self.n+1),self.n,replace=False)
             i+=1
-        # print(self.population
     def iterate(self,num_interations):
         i=0
-
+        #迭代
         while i<num_interations:
             self.fits=np.zeros((self.population_size))
             self.fitness()
@@ -70,10 +68,14 @@ class GeneticAlgTSP:
             i+=1
         t_population=copy.deepcopy(self.population)
         self.population=random.choices(t_population,weights=fits_rate,k=self.population_size)
-        # minimum=self.fits
-        # mi=np.argwhere(self.fits==minimum)
-        # print(mi)
-        # self.population[0]=t_population[mi]
+        minimum=min(self.fits)
+        mi=np.argwhere(self.fits==minimum)
+        j=0
+        best_remain_rate=0.05
+        best_remain_size=best_remain_rate*self.population_size
+        while j<best_remain_size:
+            self.population[j]=t_population[mi[0][0]]
+            j+=1
         
     def cross(self):
         i=int(self.population_size/2)
@@ -97,14 +99,17 @@ class GeneticAlgTSP:
             i-=1
     def mutate(self):
         i=0
-        while i<self.population_size:
+        mutate_rate=0.1
+        mutate_size=int(self.population_size*mutate_rate)
+        while i<mutate_size:
             indexs=random.sample(range(0,self.n),2)
             indexs.sort()
             k1=indexs[0]
             k2=indexs[1]
             self.population[k1:k2]=reversed(self.population[k1:k2])
             i+=1
-filename="dj38.tsp"
+filename="ch71009.tsp"
+# filename="dj38.tsp"
 tsp1= GeneticAlgTSP(filename)
 i=0
 while i<1000:
