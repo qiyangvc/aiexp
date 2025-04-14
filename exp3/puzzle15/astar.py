@@ -119,10 +119,8 @@ def is_finished(puzzle):
                 return False
             j+=1
         i+=1
-    print("succes")
+    # print("succes")
     return True
-    
-puzzle=[[1,14,3,4],[5,0,7,8],[9,10,11,12],[6,13,2,15]]
-A_star(puzzle)
+
     
         

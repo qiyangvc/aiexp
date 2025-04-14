@@ -5,11 +5,11 @@ import numpy as np
 
 class GeneticAlgTSP:
     n=0#城市数量
-    filename=''
+    filename=''#文件名
     cities=np.array#每个城市的坐标
-    population_size=10#种群容量
+    population_size=100#种群容量
     population=np.array#种群的每个个体，由一个数组组成，即访问城市的顺序
-    fits=np.array
+    fits=np.array#适应度
     def __init__(self,filename):
         #读文件
         self.filename=filename
@@ -45,7 +45,7 @@ class GeneticAlgTSP:
             self.cross()
             self.mutate()
             i+=1
-    def fitness(self):
+    def fitness(self):#计算适应度
         i=0
         while i < self.population_size:
             j=0
@@ -59,7 +59,8 @@ class GeneticAlgTSP:
                 self.fits[i]+=t_distance
                 j+=1
             i+=1
-    def choose(self):
+    def choose(self):#选择
+        #先根据适应度选择
         fits_sum=np.sum(self.fits)
         fits_rate=np.zeros(self.population_size)
         i=0
@@ -71,13 +72,15 @@ class GeneticAlgTSP:
         minimum=min(self.fits)
         mi=np.argwhere(self.fits==minimum)
         j=0
-        best_remain_rate=0.05
+        #再保留一部分最优个体
+        best_remain_rate=0.05#保留率
         best_remain_size=best_remain_rate*self.population_size
         while j<best_remain_size:
             self.population[j]=t_population[mi[0][0]]
             j+=1
         
-    def cross(self):
+    def cross(self):#杂交
+        #这里采用交换某些地点访问顺序的方法杂交
         i=int(self.population_size/2)
         while i>0:
             indexs=random.sample(range(0,self.n),2)
@@ -97,9 +100,9 @@ class GeneticAlgTSP:
                 j+=1
             self.population[2*i-1][k1:k2]=changed_part2
             i-=1
-    def mutate(self):
+    def mutate(self):#变异
         i=0
-        mutate_rate=0.1
+        mutate_rate=0.1#变异率
         mutate_size=int(self.population_size*mutate_rate)
         while i<mutate_size:
             indexs=random.sample(range(0,self.n),2)
@@ -108,13 +111,3 @@ class GeneticAlgTSP:
             k2=indexs[1]
             self.population[k1:k2]=reversed(self.population[k1:k2])
             i+=1
-filename="ch71009.tsp"
-# filename="dj38.tsp"
-tsp1= GeneticAlgTSP(filename)
-i=0
-while i<1000:
-    # print(tsp1.n)
-    tsp1.iterate(1)
-    # print(tsp1.population)
-    print(tsp1.fits.min())
-    i+=1
