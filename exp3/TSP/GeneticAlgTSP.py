@@ -70,6 +70,10 @@ class GeneticAlgTSP:
             i+=1
         t_population=copy.deepcopy(self.population)
         self.population=random.choices(t_population,weights=fits_rate,k=self.population_size)
+        # minimum=self.fits
+        # mi=np.argwhere(self.fits==minimum)
+        # print(mi)
+        # self.population[0]=t_population[mi]
         
     def cross(self):
         i=int(self.population_size/2)
@@ -90,22 +94,6 @@ class GeneticAlgTSP:
                     k+=1
                 j+=1
             self.population[2*i-1][k1:k2]=changed_part2
-                    
-                    
-            # k=k1
-            # while k<=k1:
-            #     j=0
-            #     while j<self.population_size:
-            #         if changed_part1[k]==self.population[2*i-2][j]:
-            #             changed_indexs.append(j)
-            #         j+=1
-            #     k+=1
-            # changed_indexs.sort()
-            # j=0
-            # changed_part2=[]
-            # while j<len(changed_indexs):
-            #     t_index=changed_indexs[j]
-            #     changed_part2.append(self.population[2*i-2][t_index])
             i-=1
     def mutate(self):
         i=0
@@ -119,7 +107,7 @@ class GeneticAlgTSP:
 filename="dj38.tsp"
 tsp1= GeneticAlgTSP(filename)
 i=0
-while i<10:
+while i<1000:
     # print(tsp1.n)
     tsp1.iterate(1)
     # print(tsp1.population)
