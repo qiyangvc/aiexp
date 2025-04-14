@@ -7,7 +7,7 @@ class GeneticAlgTSP:
     n=0#城市数量
     filename=''#文件名
     cities=np.array#每个城市的坐标
-    population_size=100#种群容量
+    population_size=1000#种群容量
     population=np.array#种群的每个个体，由一个数组组成，即访问城市的顺序
     fits=np.array#适应度
     def __init__(self,filename):
