@@ -1,4 +1,5 @@
 from GeneticAlgTSP import GeneticAlgTSP
+import matplotlib.pyplot as plt
 j=0
 while j<10:
     # filename=input("请输入文件名：")
@@ -18,3 +19,4 @@ while j<10:
         i+=1
     print(m)
     j+=1
+    

@@ -7,7 +7,7 @@ class GeneticAlgTSP:
     n=0#城市数量
     filename=''#文件名
     cities=np.array#每个城市的坐标
-    population_size=1000#种群容量
+    population_size=100000#种群容量
     population=np.array#种群的每个个体，由一个数组组成，即访问城市的顺序
     fits=np.array#适应度
     def __init__(self,filename):
@@ -73,7 +73,7 @@ class GeneticAlgTSP:
         mi=np.argwhere(self.fits==minimum)
         j=0
         #再保留一部分最优个体
-        best_remain_rate=0.05#保留率
+        best_remain_rate=0.5#保留率
         best_remain_size=best_remain_rate*self.population_size
         while j<best_remain_size:
             self.population[j]=t_population[mi[0][0]]
@@ -102,7 +102,7 @@ class GeneticAlgTSP:
             i-=1
     def mutate(self):#变异
         i=0
-        mutate_rate=0.5#变异率
+        mutate_rate=0.05#变异率
         mutate_size=int(self.population_size*mutate_rate)
         while i<mutate_size:
             indexs=random.sample(range(0,self.n),2)
